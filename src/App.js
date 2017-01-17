@@ -10,33 +10,28 @@ import BootstrapNavBar from './BootstrapNavBar'
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state={
-      moviePosters: []
+    this.state = {
+      searchText: ""
     }
+    this.handleSearch = this.handleSearch.bind(this)
+  }
+    handleSearch(searchTextFromChild){
+      this.setState({
+        searchText: searchTextFromChild
+      });
+      this.props.router.push('/search/' +encodeURI(searchTextFromChild));
   }
   componentDidMount() {
-    var url = 'https://api.themoviedb.org/3/movie/now_playing?api_key=fec8b5ab27b292a68294261bb21b04a5';
-    $.getJSON(url, (movieData)=>{
-      this.setState({
-        moviePosters: movieData.results
-      })
-    })
     
   }
 
   render() {
-    var postersArray = [];
-    this.state.moviePosters.map((poster, index)=>{
-      postersArray.push(<Poster poster={poster} key={index} />)
-    });
+
     return (
       <div className="container">
-        <div className="row">
+        <div className="row">        
+          <BootstrapNavBar functionFromParent={this.handleSearch} />
           {this.props.children}
-          <BootstrapNavBar />
-          <h1>Your poster here</h1>
-
-          {postersArray}
         </div>
       </div>
     );
